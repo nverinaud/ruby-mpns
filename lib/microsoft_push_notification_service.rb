@@ -33,8 +33,6 @@ module MicrosoftPushNotificationService
       notification = raw_notification_with_options
     end
 
-    puts notification
-
     # HTTP stuff here
     # uri + header + notification (xml)
     uri = URI.parse(self.device_uri)
@@ -43,8 +41,15 @@ module MicrosoftPushNotificationService
     request = Net::HTTP::Post.new(uri.request_uri)
     request.content_type = "text/xml"
     request["X-WindowsPhone-Target"] = type.to_s
+    request["X-NotificationClass"] = "2"
     request.body = notification
-        
+    request.content_length = notification.length
+    
+    response = Net::HTTP.start(uri.host, uri.port) do |http|
+      http.request(request)
+    end
+
+    return response
   end
 
   # Class Properties

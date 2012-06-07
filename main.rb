@@ -15,6 +15,6 @@ options = {
 	}
 }
 
-uri = "http://mpns.microsoft.com/j7hd8-78d0-jjhra8"
+uri = "http://sn1.notify.live.net/throttledthirdparty/01.00/AAEmUMSnjDlRRrL8_qKMTouIAgAAAAADAQAAAAQUZm52OjIzOEQ2NDJDRkI5MEVFMEQ"
 
 MicrosoftPushNotificationService.send_notification uri, :toast, options
