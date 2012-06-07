@@ -33,18 +33,20 @@ module MicrosoftPushNotificationService
       notification = toast_notification_with_options options
       notification_class = "2"
     else
-      notification = raw_notification_with_options
+      notification = raw_notification_with_options options
       notification_class = "3"
     end
 
-    # HTTP stuff here
-    # uri + header + notification (xml)
+    # HTTP connection
     uri = URI.parse(self.device_uri)
 
     http = Net::HTTP.new(uri.host, uri.port)
     request = Net::HTTP::Post.new(uri.request_uri)
     request.content_type = "text/xml"
-    request["X-WindowsPhone-Target"] = type.to_s
+
+    if type.to_sym != :raw
+      request["X-WindowsPhone-Target"] = type.to_s
+    end
     request["X-NotificationClass"] = notification_class
     request.body = notification
     request.content_length = notification.length
@@ -55,18 +57,6 @@ module MicrosoftPushNotificationService
 
     return response
   end
-
-  # Class Properties
-
-  def self.default_notification_type
-    @@default_notification_type
-  end
-
-  def self.default_notification_type= type
-    @@default_notification_type = type.to_sym
-  end
-
-  self.default_notification_type = :toast # can also be :tile or :raw
 
 
 protected
@@ -109,15 +99,7 @@ protected
     notification <<     '<wp:Param>' << coder.encode(format_params(options[:params])) << '</wp:Param>'
     notification <<   '</wp:Toast>'
     notification << '</wp:Notification>'
-
-    # string toastMessage = 
-    #       "<wp:Notification xmlns:wp=\"WPNotification\">" +
-    #           "<wp:Toast>" +
-    #               "<wp:Text1><string></wp:Text1>" +
-    #               "<wp:Text2><string></wp:Text2>" +
-    #               "<wp:Param><string></wp:Param>" +
-    #           "</wp:Toast>" +
-    #       "</wp:Notification>";
+    return notification
   end
 
   # Tile options :
@@ -128,10 +110,34 @@ protected
   #   - back_background_image : string, path to local image embedded in the app or accessible via HTTP (.jpg or .png, 173x137px, max 80kb)
   #   - back_content : string
   def tile_notification_with_options options = {}
+    coder = HTMLEntities.new
+
+    notification = '<?xml version="1.0" encoding="utf-8"?>'
+    notification << '<wp:Notification xmlns:wp="WPNotification">'
+    notification <<   '<wp:Tile '
+    notification <<     '<wp:BackgroundImage>' << coder.encode(options[:background_image]) << '</wp:BackgroundImage>'
+    notification <<     '<wp:Count>' << coder.encode(options[:count]) << '</wp:Count>'
+    notification <<     '<wp:Title>' << coder.encode(options[:title]) << '</wp:Title>'
+    notification <<     '<wp:BackBackgroundImage>' << coder.encode(options[:back_background_image]) << '</wp:BackBackgroundImage>'
+    notification <<     '<wp:BackTitle>' << coder.encode(options[:back_title]) << '</wp:BackTitle>'
+    notification <<     '<wp:BackContent>' << coder.encode(options[:back_content]) << '</wp:BackContent>'
+    notification <<   '</wp:Tile>'
+    notification << '</wp:Notification>'
+    return notification
   end
 
   # Raw options :
+  #   - raw values send like: <key>value</key>
   def raw_notification_with_options options = {}
+    coder = HTMLEntities.new
+
+    notification = '<?xml version="1.0" encoding="utf-8"?>'
+    notification << '<root>'
+    options.each do |key,value|
+      notification <<   '<' << coder.encode(key.to_s) << '>' << coder.encode(value.to_s) << '</' << coder.encode(key.to_s) << '>'
+    end
+    notification << '</root>'
+    return notification
   end
 
   def format_params params = {}

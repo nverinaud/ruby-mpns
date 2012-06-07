@@ -15,6 +15,14 @@ options = {
 	}
 }
 
-uri = "http://sn1.notify.live.net/throttledthirdparty/01.00/AAEmUMSnjDlRRrL8_qKMTouIAgAAAAADAQAAAAQUZm52OjIzOEQ2NDJDRkI5MEVFMEQ"
+uri = "http://sn1.notify.live.net/throttledthirdparty/01.00/AAEaEI26DywTQoTyuwfn7r2lAgAAAAADAQAAAAQUZm52OjIzOEQ2NDJDRkI5MEVFMEQ"
 
-MicrosoftPushNotificationService.send_notification uri, :toast, options
+# MicrosoftPushNotificationService.send_notification uri, :toast, options
+
+options = {
+	table_id: 2,
+	dummy: 1
+}
+
+response = MicrosoftPushNotificationService.send_notification uri, :raw, options
+puts response
