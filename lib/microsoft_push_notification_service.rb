@@ -24,13 +24,17 @@ module MicrosoftPushNotificationService
     header = self.http_header_for_type type
 
     notification = nil
+    notification_class = nil
 
     if type == :tile
       notification = tile_notification_with_options options
+      notification_class = "1"
     elsif type == :toast
       notification = toast_notification_with_options options
+      notification_class = "2"
     else
       notification = raw_notification_with_options
+      notification_class = "3"
     end
 
     # HTTP stuff here
@@ -41,7 +45,7 @@ module MicrosoftPushNotificationService
     request = Net::HTTP::Post.new(uri.request_uri)
     request.content_type = "text/xml"
     request["X-WindowsPhone-Target"] = type.to_s
-    request["X-NotificationClass"] = "2"
+    request["X-NotificationClass"] = notification_class
     request.body = notification
     request.content_length = notification.length
     
