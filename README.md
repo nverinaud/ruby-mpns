@@ -7,12 +7,29 @@ A ruby library to communicate with Microsoft Push Notification Service.
 Currently it is just a simple library.
 Drop the file `lib/microsoft_push_notification_service.rb` in your project and include it with `require`.
 
-**Warning !!**: this lib requires `htmlentities` gem to work. You find it [here](https://github.com/threedaymonk/htmlentities) 
+**Warning !!** This lib requires `htmlentities` gem to work. You find it [here](https://github.com/threedaymonk/htmlentities) 
 or install it using `gem install htmlentities`.
 
 ## Usage
 
-See `sample_usage.rb` for samples.
+To use it juste use the singleton `MicrosoftPushNotificationService` like the following:
+
+		uri = "http://my-uri.com/to/the-windows-phone-i-am-targetting"
+
+		options = {
+			title: "Hello !",
+			content: "Hello Push Notification.",
+			params: {
+				any_data: 2,
+				another_key: "Hum..."
+			}
+		}
+
+		reponse = MicrosoftPushNotificationService.send_notification uri, :toast, options
+
+		# response is an Net::HTTP object
+
+See `sample_usage.rb` for more samples.
 
 ## Parameters
 
@@ -33,7 +50,7 @@ You can pass whatever hash you want and an XML will be generated, like the follo
 				<key2>value2</key2>
 		</root>
 
-**Warning**: currently limited to one level, the hash must not contain another hash.
+**Warning** Currently limited to one level, the hash must not contain another hash.
 
 ### Tile notification
 
@@ -48,7 +65,7 @@ The following notification parameters can be defined in the options hash for `:t
 
 ## Reference
 
-For general information about Push Notification on Windows Phone check the [MSDN](http://msdn.microsoft.com/en-us/library/hh202945(v=vs.92).aspx).
+For general information about Push Notification on Windows Phone check the [MSDN](http://msdn.microsoft.com/en-us/library/hh202945\(v=vs.92\).aspx).
 
 ## Todo
 
