@@ -137,6 +137,8 @@ protected
       notification <<   '<' << coder.encode(key.to_s) << '>' << coder.encode(value.to_s) << '</' << coder.encode(key.to_s) << '>'
     end
     notification << '</root>'
+
+    puts notification
     return notification
   end
 
