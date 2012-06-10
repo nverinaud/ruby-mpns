@@ -25,9 +25,8 @@ To use it juste use the singleton `MicrosoftPushNotificationService` like the fo
 			}
 		}
 
-		reponse = MicrosoftPushNotificationService.send_notification uri, :toast, options
-
 		# response is an Net::HTTP object
+		reponse = MicrosoftPushNotificationService.send_notification uri, :toast, options
 
 See `sample_usage.rb` for more samples.
 
@@ -72,6 +71,7 @@ For general information about Push Notification on Windows Phone check the [MSDN
 * Make this lib a gem
 * Add unit tests
 * Add support for multi-level hash for raw notifications
+* Make the future gem rails compatible and add an ActiveRecord extension (acts_as_microsoft_pushable)
 
 Copyright (c) 2012 [Nicolas VERINAUD](http://www.nverinaud.com). Released under the MIT license.
 
