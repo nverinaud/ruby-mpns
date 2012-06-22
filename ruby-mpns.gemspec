@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = "ruby-mpns"
-  s.version = "1.0.0"
+  s.version = "1.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Nicolas VERINAUD"]
@@ -17,13 +17,17 @@ Gem::Specification.new do |s|
     "README.md"
   ]
   s.files = [
+    "CHANGELOG.md",
     "Gemfile",
     "Gemfile.lock",
     "LICENSE",
     "README.md",
     "Rakefile",
     "VERSION",
+    "init.rb",
     "lib/ruby-mpns.rb",
+    "rails/init.rb",
+    "ruby-mpns.gemspec",
     "sample/sample_usage.rb",
     "test/helper.rb",
     "test/test_ruby-mpns.rb"
