@@ -1,14 +1,16 @@
 # ruby-mpns
 
-A ruby library to communicate with Microsoft Push Notification Service.
+A ruby gem to communicate with Microsoft Push Notification Service.
 
 ## Installing
 
-Currently it is just a simple library.
-Drop the file `lib/microsoft_push_notification_service.rb` in your project and include it with `require`.
+From the commande line:
 
-**Warning !!** This lib requires `htmlentities` gem to work. You find it [here](https://github.com/threedaymonk/htmlentities) 
-or install it using `gem install htmlentities`.
+`gem install ruby-mpns`
+
+Or in your gemfile:
+
+`gem 'ruby-mpns'`
 
 ## Usage
 
@@ -28,7 +30,7 @@ To use it juste use the singleton `MicrosoftPushNotificationService` like the fo
 		# response is an Net::HTTP object
 		reponse = MicrosoftPushNotificationService.send_notification uri, :toast, options
 
-See `sample_usage.rb` for more samples.
+See `sample/sample_usage.rb` for more samples.
 
 ## Parameters
 
@@ -68,10 +70,11 @@ For general information about Push Notification on Windows Phone check the [MSDN
 
 ## Todo
 
-* Make this lib a gem
 * Add unit tests
 * Add support for multi-level hash for raw notifications
 * Make the future gem rails compatible and add an ActiveRecord extension (acts_as_microsoft_pushable)
+
+## License
 
 Copyright (c) 2012 [Nicolas VERINAUD](http://www.nverinaud.com). Released under the MIT license.
 
