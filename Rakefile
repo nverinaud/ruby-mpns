@@ -20,7 +20,6 @@ Jeweler::Tasks.new do |gem|
   gem.description = %Q{This gem provides an easy way to send push notifications to Windows Phone devices using Microsoft Push Notification Service.}
   gem.email = "n.verinaud@gmail.com"
   gem.authors = ["Nicolas VERINAUD"]
-  gem.add_dependency 'htmlentities'
   gem.required_ruby_version = '>= 1.9.2'
   gem.files.exclude 'sample' # exclude sample directory
 end
