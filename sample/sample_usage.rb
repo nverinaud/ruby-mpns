@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-require File.dirname(__FILE__) + '/lib/microsoft_push_notification_service'
+require File.dirname(__FILE__) + '/lib/ruby-mpns'
 
 puts "=== Test ==="
 
