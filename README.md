@@ -72,7 +72,7 @@ For general information about Push Notification on Windows Phone check the [MSDN
 
 * Add unit tests
 * Add support for multi-level hash for raw notifications
-* Make the future gem rails compatible and add an ActiveRecord extension (acts_as_microsoft_pushable)
+* Add an ActiveRecord extension (acts_as_microsoft_pushable)
 
 ## License
 
