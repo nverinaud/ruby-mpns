@@ -1,5 +1,9 @@
 # Changelog
 
+## Release 1.1.0
+
+* NEW: The gem is now compatible with rails 3.
+
 ## Release 1.0.0
 
 * NEW: You can now use it as a gem `gem install ruby-mpns`.
