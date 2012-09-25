@@ -114,7 +114,7 @@ protected
 
     notification = '<?xml version="1.0" encoding="utf-8"?>'
     notification << '<wp:Notification xmlns:wp="WPNotification">'
-    notification <<   '<wp:Tile '
+    notification <<   '<wp:Tile' << ((options[:secondary_tile_uri])? ' id="' + coder.encode(options[:secondary_tile_uri]) + '"' : '') << '>'
     notification <<     '<wp:BackgroundImage>' << coder.encode(options[:background_image]) << '</wp:BackgroundImage>'
     notification <<     '<wp:Count>' << coder.encode(options[:count]) << '</wp:Count>'
     notification <<     '<wp:Title>' << coder.encode(options[:title]) << '</wp:Title>'
