@@ -2,7 +2,7 @@
 
 require File.dirname(__FILE__) + '/lib/ruby-mpns'
 
-puts "=== Test ==="
+puts "=== Sample Usage ==="
 
 uri = "<# Your Microsoft Push URI here #>"
 

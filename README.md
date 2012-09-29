@@ -63,12 +63,15 @@ The following notification parameters can be defined in the options hash for `:t
 * `back_title` - the title when the tile is flipped
 * `back_background_image` - the path to a local image embedded in the app or an image accessible via HTTP (.jpg or .png, 173x137px, max 80kb)
 * `back_content` - the content when the tile is flipped
+* `navigation_uri` _(optional)_ - the exact navigation URI for the tile to update, only needed if you wish to update a secondary tile
 
 ## Reference
 
 For general information about Push Notification on Windows Phone check the [MSDN](http://msdn.microsoft.com/en-us/library/hh202945\(v=vs.92\).aspx).
 
-## Todo
+## How to contribute ?
+
+### Missing features
 
 * Add unit tests
 * Add support for multi-level hash for raw notifications
