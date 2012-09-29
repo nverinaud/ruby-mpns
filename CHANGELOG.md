@@ -1,5 +1,10 @@
 # Changelog
 
+## Release 1.1.2
+
+* FIX: Fix the tile notification xml generation
+* Add support for secondary tile notification
+
 ## Release 1.1.1
 
 * FIX: Fix double htmlentities in gemspec.
