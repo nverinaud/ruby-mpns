@@ -109,12 +109,16 @@ protected
   #   - back_title : string
   #   - back_background_image : string, path to local image embedded in the app or accessible via HTTP (.jpg or .png, 173x137px, max 80kb)
   #   - back_content : string
+  #   - (optional) navigation_uri : string, the exact navigation URI for the tile to update, only needed if you wish to update a secondary tile
   def tile_notification_with_options options = {}
     coder = HTMLEntities.new
 
+    navigation_uri = options[:navigation_uri]
+    tile_id = navigation_uri.nil? ? "" : 'Id="' + coder.encode(navigation_uri) + '"'
+
     notification = '<?xml version="1.0" encoding="utf-8"?>'
     notification << '<wp:Notification xmlns:wp="WPNotification">'
-    notification <<   '<wp:Tile '
+    notification <<   '<wp:Tile' << tile_id << '>'
     notification <<     '<wp:BackgroundImage>' << coder.encode(options[:background_image]) << '</wp:BackgroundImage>'
     notification <<     '<wp:Count>' << coder.encode(options[:count]) << '</wp:Count>'
     notification <<     '<wp:Title>' << coder.encode(options[:title]) << '</wp:Title>'

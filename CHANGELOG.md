@@ -1,5 +1,9 @@
 # Changelog
 
+## Release 1.1.1
+
+* FIX: Fix double htmlentities in gemspec.
+
 ## Release 1.1.0
 
 * NEW: The gem is now compatible with rails 3.
