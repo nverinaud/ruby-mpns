@@ -14,7 +14,7 @@ Or in your gemfile:
 
 ## Usage
 
-To use it juste use the singleton `MicrosoftPushNotificationService` like the following:
+To use it just use the singleton `MicrosoftPushNotificationService` like the following:
 
 		uri = "http://my-uri.com/to/the-windows-phone-i-am-targetting"
 
