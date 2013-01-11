@@ -1,6 +1,6 @@
-require "htmlentities"
-require "net/http"
-require "uri"
+require 'htmlentities'
+require 'net/http'
+require 'uri'
 
 module MicrosoftPushNotificationService
 
@@ -20,59 +20,43 @@ module MicrosoftPushNotificationService
   end
 
   def send_notification type, options = {}
-    type = safe_type_to_sym type
-
-    notification = nil
-    notification_class = nil
-
-    if type == :tile
-      notification = tile_notification_with_options options
-      notification_class = "1"
-    elsif type == :toast
-      notification = toast_notification_with_options options
-      notification_class = "2"
-    else
-      notification = raw_notification_with_options options
-      notification_class = "3"
-    end
-
-    # HTTP connection
+    type = safe_type_to_sym(type)
+    notification, notification_class = build_notification(type, options)
     uri = URI.parse(self.device_uri)
 
     request = Net::HTTP::Post.new(uri.request_uri)
-    request.content_type = "text/xml"
-
-    if type.to_sym != :raw
-      request["X-WindowsPhone-Target"] = type.to_s
-    end
-    request["X-NotificationClass"] = notification_class
+    request.content_type = 'text/xml'
+    request['X-WindowsPhone-Target'] = type.to_s if type.to_sym != :raw
+    request['X-NotificationClass'] = notification_class
     request.body = notification
     request.content_length = notification.length
 
-    response = Net::HTTP.start(uri.host, uri.port) do |http|
-      http.request(request)
-    end
-
-    return response
+    Net::HTTP.start(uri.host, uri.port) { |http| http.request request }
   end
 
 
 protected
 
-  def safe_type_to_sym type
-    sym = nil
+  def safe_type_to_sym(type)
+    sym = type.to_sym unless type.nil?
+    sym = :raw unless [:tile, :toast].include?(sym)
+    sym
+  end
 
-    unless type.nil?
-      sym = type.to_sym
+  def notification_builder_for_type(type)
+    case type
+    when :tile
+      :tile_notification_with_options
+    when :toast
+      :toast_notification_with_options
     else
-      sym = :raw
+      :raw_notification_with_options
     end
+  end
 
-    if sym != :tile && sym != :toast
-      sym = :raw
-    end
-
-    return sym
+  def build_notification(type, options = {})
+    notification_builder = notification_builder_for_type(type)
+    send(notification_builder, options)
   end
 
   # Toast options :
@@ -90,7 +74,7 @@ protected
     notification <<     '<wp:Param>' << coder.encode(format_params(options[:params])) << '</wp:Param>'
     notification <<   '</wp:Toast>'
     notification << '</wp:Notification>'
-    return notification
+    return notification, '2'
   end
 
   # Tile options :
@@ -118,7 +102,7 @@ protected
     notification <<     '<wp:BackContent>' << coder.encode(options[:back_content]) << '</wp:BackContent>'
     notification <<   '</wp:Tile>'
     notification << '</wp:Notification>'
-    return notification
+    return notification, '1'
   end
 
   # Raw options :
@@ -133,7 +117,7 @@ protected
     end
     notification << '</root>'
 
-    return notification
+    return notification, '3'
   end
 
   def format_params params = {}
