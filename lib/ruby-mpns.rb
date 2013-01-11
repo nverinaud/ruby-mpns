@@ -21,7 +21,6 @@ module MicrosoftPushNotificationService
 
   def send_notification type, options = {}
     type = safe_type_to_sym type
-    header = self.http_header_for_type type
 
     notification = nil
     notification_class = nil
@@ -75,13 +74,6 @@ protected
     end
 
     return sym
-  end
-
-  def http_header_for_type type
-
-    if type == :toast || type == :tile
-      "X-WindowsPhone-Target:#{type.to_s}"
-    end
   end
 
   # Toast options :
