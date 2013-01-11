@@ -4,7 +4,7 @@ require "uri"
 
 module MicrosoftPushNotificationService
 
-	def self.extended(base)
+  def self.extended(base)
     unless base.respond_to?(:device_uri)
       base.class.class_eval do
         attr_accessor :device_uri
@@ -13,10 +13,10 @@ module MicrosoftPushNotificationService
   end
 
   def self.send_notification uri, type, options = {}
-  	device = Object.new
-  	device.extend MicrosoftPushNotificationService
-  	device.device_uri = uri
-  	device.send_notification type, options
+    device = Object.new
+    device.extend MicrosoftPushNotificationService
+    device.device_uri = uri
+    device.send_notification type, options
   end
 
   def send_notification type, options = {}
@@ -50,7 +50,7 @@ module MicrosoftPushNotificationService
     request["X-NotificationClass"] = notification_class
     request.body = notification
     request.content_length = notification.length
-    
+
     response = Net::HTTP.start(uri.host, uri.port) do |http|
       http.request(request)
     end
