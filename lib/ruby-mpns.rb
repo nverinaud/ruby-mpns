@@ -133,7 +133,6 @@ protected
     end
     notification << '</root>'
 
-    puts notification
     return notification
   end
 
