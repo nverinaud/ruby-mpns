@@ -49,14 +49,14 @@ class TestRubyMpns < Test::Unit::TestCase
                          navigation_uri: 'uri' })
     assert_equal xml, '<?xml version="1.0" encoding="UTF-8"?>' +
       '<wp:Notification xmlns:wp="WPNotification">' +
-      '<wp:Tile Id="uri">' +
-      '<wp:BackgroundImage>bg</wp:BackgroundImage>' +
-      '<wp:Count>1337</wp:Count>' +
-      '<wp:Title>title</wp:Title>' +
-      '<wp:BackBackgroundImage>bkbg</wp:BackBackgroundImage>' +
-      '<wp:BackTitle>bktitle</wp:BackTitle>' +
-      '<wp:BackContent>bkcontent</wp:BackContent>' +
-      '</wp:Tile>' +
+        '<wp:Tile Id="uri">' +
+          '<wp:BackgroundImage>bg</wp:BackgroundImage>' +
+          '<wp:Count>1337</wp:Count>' +
+          '<wp:Title>title</wp:Title>' +
+          '<wp:BackBackgroundImage>bkbg</wp:BackBackgroundImage>' +
+          '<wp:BackTitle>bktitle</wp:BackTitle>' +
+          '<wp:BackContent>bkcontent</wp:BackContent>' +
+        '</wp:Tile>' +
       '</wp:Notification>'
   end
 
@@ -66,11 +66,11 @@ class TestRubyMpns < Test::Unit::TestCase
                        { title: 'title', content: 'content', params: {} })
     assert_equal xml, '<?xml version="1.0" encoding="UTF-8"?>' +
       '<wp:Notification xmlns:wp="WPNotification">' +
-      '<wp:Toast>' +
-      '<wp:Text1>title</wp:Text1>' +
-      '<wp:Text2>content</wp:Text2>' +
-      '<wp:Param>?</wp:Param>' +
-      '</wp:Toast>' +
+        '<wp:Toast>' +
+          '<wp:Text1>title</wp:Text1>' +
+          '<wp:Text2>content</wp:Text2>' +
+          '<wp:Param>?</wp:Param>' +
+        '</wp:Toast>' +
       '</wp:Notification>'
   end
 
@@ -80,8 +80,24 @@ class TestRubyMpns < Test::Unit::TestCase
                        { key1: 'val1', key2: 'val2' })
     assert_equal xml, '<?xml version="1.0" encoding="UTF-8"?>' +
       '<root>' +
-      '<key1>val1</key1>' +
-      '<key2>val2</key2>' +
+        '<key1>val1</key1>' +
+        '<key2>val2</key2>' +
+      '</root>'
+  end
+
+  should 'make raw XML with nested tags' do
+    mpns = Object.new.extend MicrosoftPushNotificationService
+    xml, _ = mpns.send(:raw_notification_with_options,
+                       { key1: 'val1', key2: { subkey1: 'subval1', subkey2: { subsubkey1: 'subsubval1' } } })
+    assert_equal xml, '<?xml version="1.0" encoding="UTF-8"?>' +
+      '<root>' +
+        '<key1>val1</key1>' +
+        '<key2>' +
+          '<subkey1>subval1</subkey1>' +
+          '<subkey2>' +
+            '<subsubkey1>subsubval1</subsubkey1>' +
+          '</subkey2>' +
+        '</key2>' +
       '</root>'
   end
 end

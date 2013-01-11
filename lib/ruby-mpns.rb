@@ -106,12 +106,14 @@ protected
   def raw_notification_with_options options = {}
     xml = Builder::XmlMarkup.new
     xml.instruct!
-    xml.root do
-      options.each do |k, v|
-        xml.tag!(k.to_s) { xml.text!(v.to_s) }
-      end
-    end
+    xml.root { build_hash(xml, options) }
     [xml.target!, '3']
+  end
+
+  def build_hash(xml, options)
+    options.each do |k, v|
+      xml.tag!(k.to_s) { v.is_a?(Hash) ? build_hash(xml, v) : xml.text!(v.to_s) }
+    end
   end
 
   def format_params params = {}
