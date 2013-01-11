@@ -39,7 +39,6 @@ module MicrosoftPushNotificationService
     # HTTP connection
     uri = URI.parse(self.device_uri)
 
-    http = Net::HTTP.new(uri.host, uri.port)
     request = Net::HTTP::Post.new(uri.request_uri)
     request.content_type = "text/xml"
 
