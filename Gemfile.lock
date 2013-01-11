@@ -1,8 +1,8 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    builder (3.0.4)
     git (1.2.5)
-    htmlentities (4.3.1)
     jeweler (1.8.3)
       bundler (~> 1.0)
       git (>= 1.2.5)
@@ -27,8 +27,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  builder
   bundler (>= 1.0.0)
-  htmlentities
   jeweler (~> 1.8.3)
   rdoc (~> 3.12)
   shoulda
