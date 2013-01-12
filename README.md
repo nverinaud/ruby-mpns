@@ -49,9 +49,10 @@ You can pass whatever hash you want and an XML will be generated, like the follo
 		<root>
 				<key1>value1</key1>
 				<key2>value2</key2>
+				<subtree>
+					<subkey>value</subkey>
+				</subtree>
 		</root>
-
-**Warning** Currently limited to one level, the hash must not contain another hash.
 
 ### Tile notification
 
