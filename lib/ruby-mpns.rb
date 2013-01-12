@@ -12,14 +12,14 @@ module MicrosoftPushNotificationService
     end
   end
 
-  def self.send_notification uri, type, options = {}
+  def self.send_notification(uri, type, options = {})
     device = Object.new
     device.extend MicrosoftPushNotificationService
     device.device_uri = uri
     device.send_notification type, options
   end
 
-  def send_notification type, options = {}
+  def send_notification(type, options = {})
     type = safe_type_to_sym(type)
     notification, notification_class = build_notification(type, options)
     uri = URI.parse(self.device_uri)
@@ -67,7 +67,7 @@ protected
   #   - back_background_image : string, path to local image embedded in the app or accessible via HTTP (.jpg or .png, 173x137px, max 80kb)
   #   - back_content : string
   #   - (optional) navigation_uri : string, the exact navigation URI for the tile to update, only needed if you wish to update a secondary tile
-  def tile_notification_with_options options = {}
+  def tile_notification_with_options(options = {})
     uri = options[:navigation_uri]
     xml = Builder::XmlMarkup.new
     xml.instruct!
@@ -103,7 +103,7 @@ protected
 
   # Raw options :
   #   - raw values send like: <key>value</key>
-  def raw_notification_with_options options = {}
+  def raw_notification_with_options(options = {})
     xml = Builder::XmlMarkup.new
     xml.instruct!
     xml.root { build_hash(xml, options) }
@@ -116,7 +116,7 @@ protected
     end
   end
 
-  def format_params params = {}
+  def format_params(params = {})
     return '' if params.nil?
     query = params.collect { |k, v| k.to_s + '=' + v.to_s } * '&'
     '?' + query
