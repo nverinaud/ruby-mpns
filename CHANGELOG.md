@@ -1,5 +1,10 @@
 # Changelog
 
+## Release 1.2.0
+
+* NEW: unit tests has been added
+* NEW: the raw notification supports multi-level hash
+
 ## Release 1.1.2
 
 * FIX: Fix the tile notification xml generation

@@ -1,6 +1,6 @@
 source "http://rubygems.org"
 
-gem 'htmlentities'
+gem 'builder'
 
 group :development do
   gem "shoulda", ">= 0"

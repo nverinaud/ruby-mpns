@@ -14,7 +14,7 @@ Or in your gemfile:
 
 ## Usage
 
-To use it juste use the singleton `MicrosoftPushNotificationService` like the following:
+To use it just use the singleton `MicrosoftPushNotificationService` like the following:
 
 		uri = "http://my-uri.com/to/the-windows-phone-i-am-targetting"
 
@@ -49,9 +49,10 @@ You can pass whatever hash you want and an XML will be generated, like the follo
 		<root>
 				<key1>value1</key1>
 				<key2>value2</key2>
+				<subtree>
+					<subkey>value</subkey>
+				</subtree>
 		</root>
-
-**Warning** Currently limited to one level, the hash must not contain another hash.
 
 ### Tile notification
 
@@ -73,9 +74,11 @@ For general information about Push Notification on Windows Phone check the [MSDN
 
 ### Missing features
 
-* Add unit tests
-* Add support for multi-level hash for raw notifications
 * Add an ActiveRecord extension (acts_as_microsoft_pushable)
+
+### Contributors
+
+* [Dmitry Medvinsky](https://github.com/dmedvinsky)
 
 ## License
 

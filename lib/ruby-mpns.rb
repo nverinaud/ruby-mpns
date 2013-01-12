@@ -1,10 +1,10 @@
-require "htmlentities"
-require "net/http"
-require "uri"
+require 'builder'
+require 'net/http'
+require 'uri'
 
 module MicrosoftPushNotificationService
 
-	def self.extended(base)
+  def self.extended(base)
     unless base.respond_to?(:device_uri)
       base.class.class_eval do
         attr_accessor :device_uri
@@ -12,94 +12,51 @@ module MicrosoftPushNotificationService
     end
   end
 
-  def self.send_notification uri, type, options = {}
-  	device = Object.new
-  	device.extend MicrosoftPushNotificationService
-  	device.device_uri = uri
-  	device.send_notification type, options
+  def self.send_notification(uri, type, options = {})
+    device = Object.new
+    device.extend MicrosoftPushNotificationService
+    device.device_uri = uri
+    device.send_notification type, options
   end
 
-  def send_notification type, options = {}
-    type = safe_type_to_sym type
-    header = self.http_header_for_type type
-
-    notification = nil
-    notification_class = nil
-
-    if type == :tile
-      notification = tile_notification_with_options options
-      notification_class = "1"
-    elsif type == :toast
-      notification = toast_notification_with_options options
-      notification_class = "2"
-    else
-      notification = raw_notification_with_options options
-      notification_class = "3"
-    end
-
-    # HTTP connection
+  def send_notification(type, options = {})
+    type = safe_type_to_sym(type)
+    notification, notification_class = build_notification(type, options)
     uri = URI.parse(self.device_uri)
 
-    http = Net::HTTP.new(uri.host, uri.port)
     request = Net::HTTP::Post.new(uri.request_uri)
-    request.content_type = "text/xml"
-
-    if type.to_sym != :raw
-      request["X-WindowsPhone-Target"] = type.to_s
-    end
-    request["X-NotificationClass"] = notification_class
+    request.content_type = 'text/xml'
+    request['X-WindowsPhone-Target'] = type.to_s if type.to_sym != :raw
+    request['X-NotificationClass'] = notification_class
     request.body = notification
     request.content_length = notification.length
-    
-    response = Net::HTTP.start(uri.host, uri.port) do |http|
-      http.request(request)
-    end
 
-    return response
+    Net::HTTP.start(uri.host, uri.port) { |http| http.request request }
   end
 
 
 protected
 
-  def safe_type_to_sym type
-    sym = nil
+  def safe_type_to_sym(type)
+    sym = type.to_sym unless type.nil?
+    sym = :raw unless [:tile, :toast].include?(sym)
+    sym
+  end
 
-    unless type.nil?
-      sym = type.to_sym
+  def notification_builder_for_type(type)
+    case type
+    when :tile
+      :tile_notification_with_options
+    when :toast
+      :toast_notification_with_options
     else
-      sym = :raw
-    end
-
-    if sym != :tile && sym != :toast
-      sym = :raw
-    end
-
-    return sym
-  end
-
-  def http_header_for_type type
-
-    if type == :toast || type == :tile
-      "X-WindowsPhone-Target:#{type.to_s}"
+      :raw_notification_with_options
     end
   end
 
-  # Toast options :
-  #   - title : string
-  #   - content : string
-  #   - params : hash
-  def toast_notification_with_options options = {}
-    coder = HTMLEntities.new
-
-    notification = '<?xml version="1.0" encoding="utf-8"?>'
-    notification << '<wp:Notification xmlns:wp="WPNotification">'
-    notification <<   '<wp:Toast>'
-    notification <<     '<wp:Text1>' << coder.encode(options[:title]) << '</wp:Text1>'
-    notification <<     '<wp:Text2>' << coder.encode(options[:content]) << '</wp:Text2>'
-    notification <<     '<wp:Param>' << coder.encode(format_params(options[:params])) << '</wp:Param>'
-    notification <<   '</wp:Toast>'
-    notification << '</wp:Notification>'
-    return notification
+  def build_notification(type, options = {})
+    notification_builder = notification_builder_for_type(type)
+    send(notification_builder, options)
   end
 
   # Tile options :
@@ -110,54 +67,59 @@ protected
   #   - back_background_image : string, path to local image embedded in the app or accessible via HTTP (.jpg or .png, 173x137px, max 80kb)
   #   - back_content : string
   #   - (optional) navigation_uri : string, the exact navigation URI for the tile to update, only needed if you wish to update a secondary tile
-  def tile_notification_with_options options = {}
-    coder = HTMLEntities.new
+  def tile_notification_with_options(options = {})
+    uri = options[:navigation_uri]
+    xml = Builder::XmlMarkup.new
+    xml.instruct!
+    xml.tag!('wp:Notification', 'xmlns:wp' => 'WPNotification') do
+      xml.tag!('wp:Tile', uri.nil? ? {} : {'Id' => uri}) do
+        xml.tag!('wp:BackgroundImage') { xml.text!(options[:background_image] || '') }
+        xml.tag!('wp:Count') { xml.text!(options[:count].to_s || '') }
+        xml.tag!('wp:Title') { xml.text!(options[:title] || '') }
+        xml.tag!('wp:BackBackgroundImage') { xml.text!(options[:back_background_image] || '') }
+        xml.tag!('wp:BackTitle') { xml.text!(options[:back_title] || '') }
+        xml.tag!('wp:BackContent') { xml.text!(options[:back_content] || '') }
+      end
+    end
+    [xml.target!, '1']
+  end
 
-    navigation_uri = options[:navigation_uri]
-    tile_id = navigation_uri.nil? ? "" : 'Id="' + coder.encode(navigation_uri) + '"'
-
-    notification = '<?xml version="1.0" encoding="utf-8"?>'
-    notification << '<wp:Notification xmlns:wp="WPNotification">'
-    notification <<   '<wp:Tile' << tile_id << '>'
-    notification <<     '<wp:BackgroundImage>' << coder.encode(options[:background_image]) << '</wp:BackgroundImage>'
-    notification <<     '<wp:Count>' << coder.encode(options[:count]) << '</wp:Count>'
-    notification <<     '<wp:Title>' << coder.encode(options[:title]) << '</wp:Title>'
-    notification <<     '<wp:BackBackgroundImage>' << coder.encode(options[:back_background_image]) << '</wp:BackBackgroundImage>'
-    notification <<     '<wp:BackTitle>' << coder.encode(options[:back_title]) << '</wp:BackTitle>'
-    notification <<     '<wp:BackContent>' << coder.encode(options[:back_content]) << '</wp:BackContent>'
-    notification <<   '</wp:Tile>'
-    notification << '</wp:Notification>'
-    return notification
+  # Toast options :
+  #   - title : string
+  #   - content : string
+  #   - params : hash
+  def toast_notification_with_options(options = {})
+    xml = Builder::XmlMarkup.new
+    xml.instruct!
+    xml.tag!('wp:Notification', 'xmlns:wp' => 'WPNotification') do
+      xml.tag!('wp:Toast') do
+        xml.tag!('wp:Text1') { xml.text!(options[:title] || '') }
+        xml.tag!('wp:Text2') { xml.text!(options[:content] || '') }
+        xml.tag!('wp:Param') { xml.text!(format_params(options[:params])) }
+      end
+    end
+    [xml.target!, '2']
   end
 
   # Raw options :
   #   - raw values send like: <key>value</key>
-  def raw_notification_with_options options = {}
-    coder = HTMLEntities.new
-
-    notification = '<?xml version="1.0" encoding="utf-8"?>'
-    notification << '<root>'
-    options.each do |key,value|
-      notification <<   '<' << coder.encode(key.to_s) << '>' << coder.encode(value.to_s) << '</' << coder.encode(key.to_s) << '>'
-    end
-    notification << '</root>'
-
-    puts notification
-    return notification
+  def raw_notification_with_options(options = {})
+    xml = Builder::XmlMarkup.new
+    xml.instruct!
+    xml.root { build_hash(xml, options) }
+    [xml.target!, '3']
   end
 
-  def format_params params = {}
-    p = "?"
-    length = params.length
-    count = 0
-    params.each do |key,value|
-      p << key.to_s << "=" << value.to_s
-      count += 1
-      if count < length
-        p << "&"
-      end
+  def build_hash(xml, options)
+    options.each do |k, v|
+      xml.tag!(k.to_s) { v.is_a?(Hash) ? build_hash(xml, v) : xml.text!(v.to_s) }
     end
-    return p
+  end
+
+  def format_params(params = {})
+    return '' if params.nil?
+    query = params.collect { |k, v| k.to_s + '=' + v.to_s } * '&'
+    '?' + query
   end
 
 end
