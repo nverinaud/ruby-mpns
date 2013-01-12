@@ -73,9 +73,11 @@ For general information about Push Notification on Windows Phone check the [MSDN
 
 ### Missing features
 
-* Add unit tests
-* Add support for multi-level hash for raw notifications
 * Add an ActiveRecord extension (acts_as_microsoft_pushable)
+
+### Contributors
+
+* [Dmitry Medvinsky](https://github.com/dmedvinsky)
 
 ## License
 
