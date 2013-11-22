@@ -7,15 +7,15 @@ class TestRubyMpns < Test::Unit::TestCase
     assert_equal :raw, mpns.send(:safe_type_to_sym, 'beer')
     assert_equal :raw, mpns.send(:safe_type_to_sym, 'raw')
     assert_equal :raw, mpns.send(:safe_type_to_sym, :raw)
-    assert_equal :tile, mpns.send(:safe_type_to_sym, 'tile')
-    assert_equal :tile, mpns.send(:safe_type_to_sym, :tile)
+    assert_equal :token, mpns.send(:safe_type_to_sym, 'token')
+    assert_equal :token, mpns.send(:safe_type_to_sym, :token)
     assert_equal :toast, mpns.send(:safe_type_to_sym, 'toast')
     assert_equal :toast, mpns.send(:safe_type_to_sym, :toast)
   end
 
   should 'get correct notification builder based on type' do
     mpns = Object.new.extend MicrosoftPushNotificationService
-    assert_equal :tile_notification_with_options, mpns.send(:notification_builder_for_type, :tile)
+    assert_equal :token_notification_with_options, mpns.send(:notification_builder_for_type, :token)
     assert_equal :toast_notification_with_options, mpns.send(:notification_builder_for_type, :toast)
     assert_equal :raw_notification_with_options, mpns.send(:notification_builder_for_type, :raw)
     assert_equal :raw_notification_with_options, mpns.send(:notification_builder_for_type, :beer)
@@ -23,7 +23,7 @@ class TestRubyMpns < Test::Unit::TestCase
 
   should 'return correct notification_class' do
     mpns = Object.new.extend MicrosoftPushNotificationService
-    _, cls = mpns.send(:build_notification, :tile)
+    _, cls = mpns.send(:build_notification, :token)
     assert_equal cls, '1'
     _, cls = mpns.send(:build_notification, :toast)
     assert_equal cls, '2'
@@ -41,7 +41,7 @@ class TestRubyMpns < Test::Unit::TestCase
 
   should 'make tile XML' do
     mpns = Object.new.extend MicrosoftPushNotificationService
-    xml, _ = mpns.send(:tile_notification_with_options,
+    xml, _ = mpns.send(:token_notification_with_options,
                        { title: 'title', count: 1337,
                          background_image: 'bg', back_title: 'bktitle',
                          back_background_image: 'bkbg',
