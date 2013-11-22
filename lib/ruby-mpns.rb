@@ -66,7 +66,7 @@ protected
   #   - back_title : string
   #   - back_background_image : string, path to local image embedded in the app or accessible via HTTP (.jpg or .png, 173x137px, max 80kb)
   #   - back_content : string
-  #   - (optional) navigation_uri : string, the exact navigation URI for the tile to update, only needed if you wish to update a secondary tile
+  #   - (optional) navigation_uri : string, the exact navigation URI for the token to update, only needed if you wish to update a secondary token
   def token_notification_with_options(options = {})
     uri = options[:navigation_uri]
     xml = Builder::XmlMarkup.new
