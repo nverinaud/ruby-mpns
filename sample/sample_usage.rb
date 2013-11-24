@@ -47,5 +47,5 @@ options = {
 	back_content: "! hcuoA"
 }
 
-response = MicrosoftPushNotificationService.send_notification uri, :tile, options
+response = MicrosoftPushNotificationService.send_notification uri, :token, options
 puts response

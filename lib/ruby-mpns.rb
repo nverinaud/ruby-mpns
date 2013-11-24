@@ -39,7 +39,7 @@ protected
 
   def safe_type_to_sym(type)
     sym = type.to_sym unless type.nil?
-    sym = :raw unless [:tile, :toast].include?(sym)
+    sym = :raw unless [:token, :toast].include?(sym)
     sym
   end
 
@@ -53,8 +53,8 @@ protected
 
   def notification_builder_for_type(type)
     case type
-    when :tile
-      :tile_notification_with_options
+    when :token
+      :token_notification_with_options
     when :toast
       :toast_notification_with_options
     else
@@ -74,8 +74,8 @@ protected
   #   - back_title : string
   #   - back_background_image : string, path to local image embedded in the app or accessible via HTTP (.jpg or .png, 173x137px, max 80kb)
   #   - back_content : string
-  #   - (optional) navigation_uri : string, the exact navigation URI for the tile to update, only needed if you wish to update a secondary tile
-  def tile_notification_with_options(options = {})
+  #   - (optional) navigation_uri : string, the exact navigation URI for the token to update, only needed if you wish to update a secondary token
+  def token_notification_with_options(options = {})
     uri = options[:navigation_uri]
     xml = Builder::XmlMarkup.new
     xml.instruct!
