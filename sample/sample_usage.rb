@@ -1,10 +1,10 @@
 # encoding: utf-8
 
-require File.dirname(__FILE__) + '/lib/ruby-mpns'
+require_relative '../lib/ruby-mpns'
 
 puts "=== Sample Usage ==="
 
-uri = "<# Your Microsoft Push URI here #>"
+uri = "http://mpns.org"
 
 #
 # => TOAST

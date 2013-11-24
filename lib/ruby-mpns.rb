@@ -26,7 +26,7 @@ module MicrosoftPushNotificationService
 
     request = Net::HTTP::Post.new(uri.request_uri)
     request.content_type = 'text/xml'
-    request['X-WindowsPhone-Target'] = type.to_s if type.to_sym != :raw
+    request['X-WindowsPhone-Target'] = windowsphone_target_header_for_type(type)
     request['X-NotificationClass'] = notification_class
     request.body = notification
     request.content_length = notification.length
@@ -41,6 +41,14 @@ protected
     sym = type.to_sym unless type.nil?
     sym = :raw unless [:tile, :toast].include?(sym)
     sym
+  end
+
+  def windowsphone_target_header_for_type(type)
+    if (type == :tile)
+      type = :token
+    end
+
+    type.to_s if [:token, :toast].include?(type.to_sym)
   end
 
   def notification_builder_for_type(type)

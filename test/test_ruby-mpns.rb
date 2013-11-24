@@ -1,4 +1,4 @@
-require 'helper'
+require_relative 'helper'
 
 class TestRubyMpns < Test::Unit::TestCase
   should 'safely convert type to symbol' do
@@ -29,6 +29,18 @@ class TestRubyMpns < Test::Unit::TestCase
     assert_equal cls, '2'
     _, cls = mpns.send(:build_notification, :raw)
     assert_equal cls, '3'
+  end
+
+  should 'return the correct windows phone target header' do
+    mpns = Object.new.extend MicrosoftPushNotificationService
+    header = mpns.send(:windowsphone_target_header_for_type, :toast)
+    assert_equal header, 'toast'
+    header = mpns.send(:windowsphone_target_header_for_type, :tile)
+    assert_equal header, 'token'
+    header = mpns.send(:windowsphone_target_header_for_type, :raw)
+    assert_equal header, nil
+    header = mpns.send(:windowsphone_target_header_for_type, :beer)
+    assert_equal header, nil
   end
 
   should 'format params like a boss' do
