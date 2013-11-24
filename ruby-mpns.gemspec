@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "ruby-mpns"
-  s.version = "1.2.0"
+  s.version = "1.2.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Nicolas VERINAUD"]
-  s.date = "2013-01-12"
+  s.date = "2013-11-24"
   s.description = "This gem provides an easy way to send push notifications to Windows Phone devices using Microsoft Push Notification Service."
   s.email = "n.verinaud@gmail.com"
   s.extra_rdoc_files = [
