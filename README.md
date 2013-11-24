@@ -81,6 +81,8 @@ For general information about Push Notification on Windows Phone check the [MSDN
 ### Contributors
 
 * [Dmitry Medvinsky](https://github.com/dmedvinsky)
+* [Sergio Campama](https://github.com/sergiocampama)
+* [Dombi Attila](https://github.com/dombesz)
 
 ## License
 
