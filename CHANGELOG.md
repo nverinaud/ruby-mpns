@@ -1,5 +1,9 @@
 # Changelog
 
+## Release 1.2.1
+
+* FIX: fix tile notification, Microsoft did update their specs (thanks to [Dombi Attila](https://github.com/dombesz)'s [pull request #4](https://github.com/nverinaud/ruby-mpns/pull/4))
+
 ## Release 1.2.0
 
 * NEW: unit tests has been added
