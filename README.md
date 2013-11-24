@@ -74,6 +74,8 @@ For general information about Push Notification on Windows Phone check the [MSDN
 
 ### Missing features
 
+* Support HTTPS
+* Support sending raw notification data in other formats like text, bytes or JSON
 * Add an ActiveRecord extension (acts_as_microsoft_pushable)
 
 ### Contributors
