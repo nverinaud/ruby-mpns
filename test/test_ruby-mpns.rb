@@ -51,6 +51,28 @@ class TestRubyMpns < Test::Unit::TestCase
     assert_equal q, '?phone=+0987 654321&email=luke@example.com'
   end
 
+  should 'extract ssl options from the options hash' do
+    ssl_options = {
+        server_crt_file: "xxxx.crt",
+        ca_file: "yyyy.crt",
+        key_file: "zzzz.insecure.key",
+      }
+    options = {
+      ssl: ssl_options,
+      title: "Hi there",
+      content: "Testing <correct> encoding of special &éà chars.",
+      params: {
+        invoice_id: 2,
+        state: 10.5,
+        another: '"hey hey"'
+      }
+    }
+    mpns = Object.new.extend MicrosoftPushNotificationService
+    mpns.send(:extract_ssl_options, options)
+    assert_equal options[:ssl], nil
+    assert_equal ssl_options, mpns.ssl_options
+  end
+
   should 'make tile XML' do
     mpns = Object.new.extend MicrosoftPushNotificationService
     xml, _ = mpns.send(:tile_notification_with_options,

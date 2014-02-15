@@ -34,6 +34,24 @@ See `sample/sample_usage.rb` for more samples.
 
 ## Parameters
 
+### SSL for unthrottled channels
+
+* server_crt_file - required
+* ca_file - required
+* key_file -required
+* verify_mode - optional, see OpenSSL::SSL
+
+    options = {
+      ssl:{
+        server_crt_file: "example.crt",
+        ca_file: "example_bundle.crt",
+        key_file: "server.key.insecure",
+        verify_mode: OpenSSL::SSL::VERIFY_NONE
+      }
+      title: "Hi there",
+      ....
+    }
+
 ### Toast notification
 
 The following notification parameters can be defined in the options hash for `:toast`:
@@ -74,7 +92,6 @@ For general information about Push Notification on Windows Phone check the [MSDN
 
 ### Missing features
 
-* Support HTTPS
 * Support sending raw notification data in other formats like text, bytes or JSON
 * Add an ActiveRecord extension (acts_as_microsoft_pushable)
 

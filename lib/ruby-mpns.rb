@@ -1,9 +1,12 @@
 require 'builder'
 require 'net/http'
+require 'net/https'
 require 'uri'
 
 module MicrosoftPushNotificationService
 
+  attr_reader :ssl_options
+  
   def self.extended(base)
     unless base.respond_to?(:device_uri)
       base.class.class_eval do
@@ -21,6 +24,7 @@ module MicrosoftPushNotificationService
 
   def send_notification(type, options = {})
     type = safe_type_to_sym(type)
+    ssl_options = extract_ssl_options(options)
     notification, notification_class = build_notification(type, options)
     uri = URI.parse(self.device_uri)
 
@@ -31,7 +35,18 @@ module MicrosoftPushNotificationService
     request.body = notification
     request.content_length = notification.length
 
-    Net::HTTP.start(uri.host, uri.port) { |http| http.request request }
+    puts uri
+    http = Net::HTTP.new(uri.host, uri.port)
+
+    if uri.scheme == "https"
+      http.use_ssl = true
+      http.cert = OpenSSL::X509::Certificate.new(File.read(@ssl_options[:server_crt_file])) if @ssl_options[:server_crt_file]
+      http.ca_file = @ssl_options[:ca_file] if @ssl_options[:ca_file]
+      http.key = OpenSSL::PKey::RSA.new(File.read(@ssl_options[:key_file])) if @ssl_options[:key_file]
+      http.verify_mode = @ssl_options[:verify_mode] if @ssl_options[:verify_mode]
+    end
+
+    http.start { |http| http.request request }
   end
 
 
@@ -60,6 +75,11 @@ protected
     else
       :raw_notification_with_options
     end
+  end
+
+  def extract_ssl_options(options)
+    @ssl_options = options[:ssl]
+    options.delete(:ssl)
   end
 
   def build_notification(type, options = {})
