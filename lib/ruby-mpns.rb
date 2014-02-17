@@ -77,8 +77,7 @@ protected
   end
 
   def extract_ssl_options(options)
-    @ssl_options = options[:ssl]
-    options.delete(:ssl)
+    @ssl_options = options.delete(:ssl)
   end
 
   def build_notification(type, options = {})
