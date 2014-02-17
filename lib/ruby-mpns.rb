@@ -35,7 +35,6 @@ module MicrosoftPushNotificationService
     request.body = notification
     request.content_length = notification.length
 
-    puts uri
     http = Net::HTTP.new(uri.host, uri.port)
 
     if uri.scheme == "https"
