@@ -39,7 +39,7 @@ module MicrosoftPushNotificationService
 
     if uri.scheme == "https"
       http.use_ssl = true
-      raise StandardError.new("SSL config is required for https channel") if @ssl_config.nil?
+      raise StandardError.new("SSL config is required for https channel") if @ssl_options.nil?
       http.cert = OpenSSL::X509::Certificate.new(File.read(@ssl_options[:server_crt_file])) if @ssl_options[:server_crt_file]
       http.ca_file = @ssl_options[:ca_file] if @ssl_options[:ca_file]
       http.key = OpenSSL::PKey::RSA.new(File.read(@ssl_options[:key_file])) if @ssl_options[:key_file]
