@@ -1,4 +1,4 @@
-# ruby-mpns
+# ruby-mpns [![Build Status](https://travis-ci.org/nverinaud/ruby-mpns.png?branch=master)](https://travis-ci.org/nverinaud/ruby-mpns)
 
 A ruby gem to communicate with Microsoft Push Notification Service.
 
