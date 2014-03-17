@@ -72,6 +72,10 @@ For general information about Push Notification on Windows Phone check the [MSDN
 
 ## How to contribute ?
 
+* Add a feature you're missing or pick up ones from the above lists.
+* Do not forget to __update the unit tests__ !
+* Make sure the tests runs using `bundle exec rake test` in the project's root directory.
+
 ### Missing features
 
 * Support HTTPS
@@ -86,6 +90,6 @@ For general information about Push Notification on Windows Phone check the [MSDN
 
 ## License
 
-Copyright (c) 2012 [Nicolas VERINAUD](http://www.nverinaud.com). Released under the MIT license.
+Copyright (c) 2012-now [Nicolas VERINAUD](http://www.nverinaud.com). Released under the MIT license.
 
 

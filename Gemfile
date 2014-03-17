@@ -1,6 +1,7 @@
 source "http://rubygems.org"
 
 gem 'builder'
+gemspec
 
 group :development do
   gem "shoulda", ">= 0"
